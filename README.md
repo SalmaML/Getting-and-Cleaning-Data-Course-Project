@@ -28,4 +28,4 @@ Human Activity Recognition Using Smartphones Data Set
 
    -From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-3. TidyDataSet.txt is the exported final requested tidy data 
+3. TidyData_avg.txt is the exported final requested tidy data 
