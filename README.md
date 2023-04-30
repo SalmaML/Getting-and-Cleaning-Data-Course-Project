@@ -1,6 +1,6 @@
 # README
 
-##Coursera Course :Getting-and-Cleaning-Data
+## Coursera Course :Getting-and-Cleaning-Data
 
 Peer-graded Assignment: Getting and Cleaning Data Course Project ( Week-4)
 
@@ -8,11 +8,11 @@ Peer-graded Assignment: Getting and Cleaning Data Course Project ( Week-4)
 
 This repo is a peer-gradded assignment submission for the Coursera course's project (Getting and Cleaning Data course project). The purpose of this project is to demonstrate the ability to collect, work with, and clean a data set. The Dataset is related to human activities such as walking, standing etc.. This code downloads the dataset from the website, extracts the desired info and analyses the data.
 
-###Dataset
+### Dataset
 Human Activity Recognition Using Smartphones Data Set
 (http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 
-###Files
+### Files
 
 1. CodeBook.md a code book that describes the variables, the dataset and all steps performed to clean the and analyse the data
 
