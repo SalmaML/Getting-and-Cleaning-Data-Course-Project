@@ -1,6 +1,12 @@
 
+#clear all variables
 rm(list = ls())
+
+#load the necessary library
 library(dplyr)
+
+print( "Load file...")
+
 filename <- "getdata_projectfiles_UCI HAR Dataset.zip"
 
 # Check if the zip file exists, otherwise download it
@@ -15,31 +21,33 @@ if (!file.exists("UCI HAR Dataset")) {
 }
 
 
-#Load all requested data frames
+#Load all requested data and store them into dataframes
+print( "Store variable in df...")
+features <- read.table("UCI HAR Dataset/features.txt", col.names = c("idx","names"))
+activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt", col.names = c("id", "label"))
 
-features <- read.table("UCI HAR Dataset/features.txt", col.names = c("idx","functions"))
-activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt", col.names = c("id", "activity"))
+x_train <- read.table("UCI HAR Dataset/train/X_train.txt", col.names = features$names)
+y_train <- read.table("UCI HAR Dataset/train/y_train.txt", col.names = "id")
 
-subject_test <- read.table("UCI HAR Dataset/test/subject_test.txt", col.names = "subject")
-x_test <- read.table("UCI HAR Dataset/test/X_test.txt", col.names = features$functions)
+x_test <- read.table("UCI HAR Dataset/test/X_test.txt", col.names = features$names)
 y_test <- read.table("UCI HAR Dataset/test/y_test.txt", col.names = "id")
 
 subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt", col.names = "subject")
-x_train <- read.table("UCI HAR Dataset/train/X_train.txt", col.names = features$functions)
-y_train <- read.table("UCI HAR Dataset/train/y_train.txt", col.names = "id")
+subject_test <- read.table("UCI HAR Dataset/test/subject_test.txt", col.names = "subject")
 
 #-------------------------------------------------------------------------------------------
 # 1- Merges the training and the test sets to create one data set.
 #-------------------------------------------------------------------------------------------
-
-X <- rbind(x_train, x_test)
-Y <- rbind(y_train, y_test)
+print( "Step-1: Merge data..")
+X_data <- rbind(x_train, x_test)
+Y_data <- rbind(y_train, y_test)
 Subject <- rbind(subject_train, subject_test)
-Merged_Data <- cbind(Subject, Y, X)
+Merged_Data <- cbind(X_data, Y_data, Subject)
 
 #-------------------------------------------------------------------------------------------
 # 2: Extracts only the measurements on the mean and standard deviation for each measurement.
 #-------------------------------------------------------------------------------------------
+print( "Step-2: Extract only the data related to the mean and std..")
 
 # Select all columns that have the keys mean and std:
 TidyData <- Merged_Data %>% select(subject, id, contains("mean"), contains("std"))
@@ -47,12 +55,15 @@ TidyData <- Merged_Data %>% select(subject, id, contains("mean"), contains("std"
 #-------------------------------------------------------------------------------------------
 #3: Uses descriptive activity names to name the activities in the data set.
 #-------------------------------------------------------------------------------------------
+print( "Step-3: Uses descriptive activity names..")
 
 TidyData$id <- activity_labels[TidyData$id, 2]
 
 #-------------------------------------------------------------------------------------------
 # 4: Appropriately labels the data set with descriptive variable names.
 #-------------------------------------------------------------------------------------------
+
+print( "Step-4: Appropriately labels the data..")
 
 names(TidyData)[2] = "activity"
 names(TidyData)<-gsub("^t", "TimeDomain", names(TidyData))
@@ -77,12 +88,15 @@ names(TidyData)<-gsub("angle", "Angle", names(TidyData))
 # of each variable for each activity and each subject.
 #-------------------------------------------------------------------------------------------
 
+print( "Step-5: creates a second, independent tidy data ..")
+
 TidyData_avg <- TidyData %>% group_by(subject, activity) %>% summarise_all(funs(mean))
 
-write.table(TidyData_avg, "TidyData_avg.txt", row.name=FALSE)
+write.table(TidyData_avg, "TidyData_avg1.txt", row.name=FALSE)
 
 #-------------------------------------------------------------------------------------------
 # #Check the variable names of the final dataframe
 #-------------------------------------------------------------------------------------------
 
 str(TidyData_avg)
+TidyData_avg
